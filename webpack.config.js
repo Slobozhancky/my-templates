@@ -29,12 +29,22 @@ module.exports = (env, args) => {
     const filename = (ext) =>
         devMode ? `[name].${ext}` : `[name].[contenthash].${ext}`;
 
+    const babelOptions = (preset) => {
+        if (preset) {
+            return {
+                presets: ["@babel/preset-env", preset],
+            };
+        }
+        return {
+            presets: ["@babel/preset-env"],
+        };
+    };
+
     return {
         context: path.resolve(__dirname, "src"),
         mode: "development",
         entry: {
-            main: "./index.ts",
-            analytics: "./analytics.js",
+            main: "./index.js",
         },
         resolve: {
             alias: {
@@ -65,14 +75,6 @@ module.exports = (env, args) => {
         module: {
             rules: [
                 {
-                    test: /\.less$/i,
-                    use: [
-                        MiniCssExtractPlugin.loader,
-                        "css-loader",
-                        "less-loader",
-                    ],
-                },
-                {
                     test: /\.(sa|sc|c)ss$/,
                     use: [
                         MiniCssExtractPlugin.loader,
@@ -93,9 +95,7 @@ module.exports = (env, args) => {
                     exclude: /(node_modules|bower_components)/,
                     use: {
                         loader: "babel-loader",
-                        options: {
-                            presets: ["@babel/preset-env"],
-                        },
+                        options: babelOptions("@babel/preset-typescript"),
                     },
                 },
                 {
@@ -103,12 +103,7 @@ module.exports = (env, args) => {
                     exclude: /(node_modules|bower_components)/,
                     use: {
                         loader: "babel-loader",
-                        options: {
-                            presets: [
-                                "@babel/preset-env",
-                                "@babel/preset-typescript",
-                            ],
-                        },
+                        options: babelOptions("@babel/preset-typescript"),
                     },
                 },
             ],
