@@ -43,6 +43,7 @@ module.exports = (env, args) => {
     return {
         context: path.resolve(__dirname, "src"),
         mode: "development",
+        devtool: "inline-source-map",
         entry: {
             main: "./index.js",
         },
